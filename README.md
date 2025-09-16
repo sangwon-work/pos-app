@@ -5,6 +5,9 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 > **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
 
 ## Node 버전 20.19.4
+- nvm use 20.19.4
+## java 버전 17.0.14-zulu
+- sdk use java 17.0.14-zulu
 
 ## Step 1: Start Metro
 
@@ -14,10 +17,11 @@ To start the Metro dev server, run the following command from the root of your R
 
 ```sh
 # Using npm
-npm start
+# npm start
 
 # OR using Yarn
-yarn start
+# yarn start
+npx react-native start --reset-cache
 ```
 
 ## Step 2: Build and run your app
@@ -97,3 +101,16 @@ To learn more about React Native, take a look at the following resources:
 - [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+
+# Android 오류
+
+yarn android 실행 시 오류
+- 안드로이드용 크로스 컴파일러(NDK clang)가 가져와야 할 안드로이드 헤더(=NDK sysroot) 대신, macOS 헤더(Xcode의 MacOSX.sdk)를 먼저 집어서 생긴 오류
+- 해결 : 오염된 환경변수 끄고 "깨끗한" 싱태로 빌드
+```shell
+   # 터밀널에 그대로 붙여넣기
+( unset CPATH SDKROOT C_INCLUDE_PATH CPLUS_INCLUDE_PATH OBJC_INCLUDE_PATH CFLAGS CPPFLAGS LDFLAGS CC CXX; \
+  cd android; rm -rf .cxx app/.cxx .gradle; \
+  ./gradlew clean; \
+  ./gradlew :app:assembleDebug --no-daemon --stacktrace )
+```
